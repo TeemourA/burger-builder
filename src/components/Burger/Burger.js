@@ -4,7 +4,7 @@ import classes from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredients/BurgerIngredient';
 
 const burger = (props) => {
-  let transfromedIngredients = Object.keys(props.ingredients)
+  let transformedIngredients = Object.keys(props.ingredients)
     .map((key) => {
       return [...Array(props.ingredients[key])]
         .map((_, i) => {
@@ -15,14 +15,14 @@ const burger = (props) => {
       return acc.concat(item);
     }, []);
 
-  if (transfromedIngredients.length === 0) {
-    transfromedIngredients = <p>Please start adding ingredients!</p>
+  if (transformedIngredients.length === 0) {
+    transformedIngredients = <p>Please start adding ingredients!</p>
   }
 
   return (
     <div className={classes.Burger}>
       <BurgerIngredient type="bread-top" />
-      {transfromedIngredients}
+      {transformedIngredients}
       <BurgerIngredient type="bread-bottom" />
     </div>
   );
