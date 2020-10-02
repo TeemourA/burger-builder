@@ -4,7 +4,7 @@ import classes from './Modal.module.css';
 import Aux from '../../../hoc/Aux/Aux';
 import Backdrop from '../Backdrop/Backdrop';
 
-const modal = React.memo((props) => (
+const modal = (props) => (
   <Aux>
     <Backdrop show={props.show} clicked={props.modalClosed} />
     <div
@@ -16,10 +16,14 @@ const modal = React.memo((props) => (
       {props.children}
     </div>
   </Aux>
-), (prevProps, nextProps) => {
-  if (prevProps.show !== nextProps.show) return false;
+);
+
+const areEqual = (prevProps, nextProps) => {
+  if (prevProps.show !== nextProps.show || prevProps.children !== nextProps.children) {
+    return false;
+  }
 
   return true;
-});
+};
 
-export default modal;
+export default React.memo(modal, areEqual);
