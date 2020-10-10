@@ -19,7 +19,7 @@ const ingredientPrices = {
 class BurgerBuilder extends Component {
   state = {
     ingredients: null,
-    totalPrice: 4,
+    totalPrice: 6.8,
     purchasable: false,
     purchasing: false,
     loading: false,
@@ -94,25 +94,26 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler = () => {
     // alert('You continue!');
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Timur Akhmedov',
-        address: {
-          street: 'Teststreet 1',
-          zipCode: '123120',
-          country: 'USA',
-        },
-        email: 'test@test.com',
-      },
-      deliveryMethod: 'fastest',
-    };
+    // this.setState({ loading: true });
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Timur Akhmedov',
+    //     address: {
+    //       street: 'Teststreet 1',
+    //       zipCode: '123120',
+    //       country: 'USA',
+    //     },
+    //     email: 'test@test.com',
+    //   },
+    //   deliveryMethod: 'fastest',
+    // };
 
-    axios.post('/orders.json', order)
-      .then(res => this.setState({ loading: false, purchasing: false }))
-      .catch(err => this.setState({ loading: false, purchasing: false }));
+    // axios.post('/orders.json', order)
+    //   .then(res => this.setState({ loading: false, purchasing: false }))
+    //   .catch(err => this.setState({ loading: false, purchasing: false }));
+    this.props.history.push('/checkout');
   }
 
   render() {
