@@ -92,11 +92,12 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: false });
   }
 
-  purchaseContinueHandler = () => { 
-    const queryString = Object.entries(this.state.ingredients)
-      .map(([ingredient, amount]) => `${encodeURIComponent(ingredient)}=${encodeURIComponent(amount)}`)
-      .push(`price=${this.state.totalPrice}`)
-      .join('&');
+  purchaseContinueHandler = () => {
+    const queryCollection = Object.entries(this.state.ingredients)
+      .map(([ingredient, amount]) => `${encodeURIComponent(ingredient)}=${encodeURIComponent(amount)}`);
+    
+    queryCollection.push(`price=${this.state.totalPrice}`);
+    const queryString = queryCollection.join('&');
 
     this.props.history.push({
       pathname: '/checkout',
