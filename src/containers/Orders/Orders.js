@@ -16,7 +16,7 @@ class Orders extends Component {
         const fetchedOrders = Object.entries(res.data)
           .map(([key, value]) => ({ id: key, ...value }));
         console.log(fetchedOrders);
-        this.setState({ orders: fetchedOrders,loading: false })
+        this.setState({ orders: fetchedOrders, loading: false })
       })
       .catch(err => this.setState({ loading: false }));
   }
