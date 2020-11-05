@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
-import actionTypes from '../../store/actions';
+import { addIngredient, removeIngredient, initIngredients } from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
   state = {
@@ -19,11 +19,7 @@ class BurgerBuilder extends Component {
   }
 
   componentDidMount() {
-    // axios.get('/ingredients.json')
-    //   .then(res => this.setState(
-    //     { ingredients: { ...res.data } },
-    //     () => this.updatePurchaseState(this.state.ingredients))
-    //   );
+    this.props.onInitIngredients();
   }
 
   updatePurchaseState = (ingredients) => {
@@ -56,7 +52,7 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    let burger = <Spinner />
+    let burger = this.props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
     if (this.props.ingredients) {
       burger = (
         <Aux>
@@ -78,10 +74,6 @@ class BurgerBuilder extends Component {
         price={this.props.totalPrice} />;
     }
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />
-    }
-
     return (
       <Aux>
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -96,11 +88,13 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => ({
   ingredients: state.ingredients,
   totalPrice: state.totalPrice,
+  error: state.error,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onIngredientAdded: (name) => dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: name  }),
-  onIngredientRemoved: (name) => dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingredientName: name  })
+  onIngredientAdded: (name) => dispatch(addIngredient(name)),
+  onIngredientRemoved: (name) => dispatch(removeIngredient(name)),
+  onInitIngredients: () => dispatch(initIngredients()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
