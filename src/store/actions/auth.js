@@ -1,9 +1,6 @@
 import axios from 'axios';
 import actionTypes from './actionTypes';
 
-const authResource =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac';
-
 export const authStart = () => ({
   type: actionTypes.AUTH_START,
 });
@@ -18,8 +15,10 @@ export const authFail = error => ({
   error,
 });
 
-export const auth = (email, password) => {
+export const auth = (email, password, isSignup) => {
   return dispatch => {
+    const actionUrl = isSignup ? 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac' : 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac';
+
     const authData = {
       email,
       password,
@@ -29,7 +28,7 @@ export const auth = (email, password) => {
 
     dispatch(authStart());
     axios
-      .post(authResource, authData)
+      .post(actionUrl, authData)
       .then(res => {
         console.log(res);
         dispatch(authSuccess(res.data));
