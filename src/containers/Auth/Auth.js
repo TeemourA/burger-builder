@@ -107,10 +107,15 @@ class Auth extends Component {
       }
     );
 
-    const component = this.props.loading ? (
-      <Spinner />
-    ) : (
+    const errorMessage = this.props.error && (
+      <p style={{ fontWeight: 'bold', color: 'red' }}>
+        {this.props.error.message}
+      </p>
+    );
+
+    const form = (
       <div className={classes.Auth}>
+        {errorMessage}
         <h3>{this.state.isSignup ? 'Sign Up' : 'Sign In'}</h3>
         <form onSubmit={this.submitHandler}>
           {formElements}
@@ -122,12 +127,15 @@ class Auth extends Component {
       </div>
     );
 
-    return component;
+    const authComponent = this.props.loading ? <Spinner /> : form;
+
+    return authComponent;
   }
 }
 
 const mapPropsToState = state => ({
   loading: state.auth.loading,
+  error: state.auth.error,
 });
 
 const mapDispatchToProps = dispatch => ({

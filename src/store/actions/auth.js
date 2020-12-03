@@ -16,6 +16,16 @@ export const authFail = error => ({
   error,
 });
 
+export const logout = () => ({
+  type: actionTypes.AUTH_LOGOUT,
+});
+
+export const setAuthTimeout = expirationTime => {
+  return dispatch => {
+    setTimeout(() => dispatch(logout()), expirationTime * 1000);
+  };
+};
+
 export const auth = (email, password, isSignup) => {
   return dispatch => {
     const actionUrl = isSignup
@@ -27,7 +37,6 @@ export const auth = (email, password, isSignup) => {
       password,
       returnSecureToken: true,
     };
-    console.log(authData);
 
     dispatch(authStart());
     axios
@@ -35,10 +44,11 @@ export const auth = (email, password, isSignup) => {
       .then(res => {
         console.log(res);
         dispatch(authSuccess(res.data.idToken, res.data.localId));
+        dispatch(setAuthTimeout(res.data.expiresIn));
       })
       .catch(err => {
         console.log(err);
-        dispatch(authFail(err.response));
+        dispatch(authFail(err.response.data.error));
       });
   };
 };
