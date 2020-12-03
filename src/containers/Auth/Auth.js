@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 import { auth } from '../../store/actions/index';
 
@@ -80,7 +81,7 @@ class Auth extends Component {
     this.props.onAuth(
       this.state.controls.email.value,
       this.state.controls.password.value,
-      this.state.isSignup,
+      this.state.isSignup
     );
   };
 
@@ -106,8 +107,11 @@ class Auth extends Component {
       }
     );
 
-    return (
+    const component = this.props.loading ? (
+      <Spinner />
+    ) : (
       <div className={classes.Auth}>
+        <h3>{this.state.isSignup ? 'Sign Up' : 'Sign In'}</h3>
         <form onSubmit={this.submitHandler}>
           {formElements}
           <Button btnType="Success">Submit</Button>
@@ -117,11 +121,18 @@ class Auth extends Component {
         </Button>
       </div>
     );
+
+    return component;
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onAuth: (email, password, isSignup) => dispatch(auth(email, password, isSignup)),
+const mapPropsToState = state => ({
+  loading: state.auth.loading,
 });
 
-export default connect(null, mapDispatchToProps)(Auth);
+const mapDispatchToProps = dispatch => ({
+  onAuth: (email, password, isSignup) =>
+    dispatch(auth(email, password, isSignup)),
+});
+
+export default connect(mapPropsToState, mapDispatchToProps)(Auth);

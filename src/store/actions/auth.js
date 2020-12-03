@@ -5,9 +5,10 @@ export const authStart = () => ({
   type: actionTypes.AUTH_START,
 });
 
-export const authSuccess = authData => ({
+export const authSuccess = (idToken, userId) => ({
   type: actionTypes.AUTH_SUCCESS,
-  authData,
+  idToken,
+  userId,
 });
 
 export const authFail = error => ({
@@ -17,7 +18,9 @@ export const authFail = error => ({
 
 export const auth = (email, password, isSignup) => {
   return dispatch => {
-    const actionUrl = isSignup ? 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac' : 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac';
+    const actionUrl = isSignup
+      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac'
+      : 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDOtlH6w4ERIKikaFfpOJ1kz642YF15Fac';
 
     const authData = {
       email,
@@ -31,7 +34,7 @@ export const auth = (email, password, isSignup) => {
       .post(actionUrl, authData)
       .then(res => {
         console.log(res);
-        dispatch(authSuccess(res.data));
+        dispatch(authSuccess(res.data.idToken, res.data.localId));
       })
       .catch(err => {
         console.log(err);
