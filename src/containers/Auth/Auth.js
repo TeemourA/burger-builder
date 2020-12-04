@@ -107,15 +107,25 @@ class Auth extends Component {
       }
     );
 
-    const errorMessage = this.props.error && (
-      <p style={{ fontWeight: 'bold', color: 'red' }}>
-        {this.props.error.message}
-      </p>
-    );
+    let authResultMessage = null;
+
+    if (this.props.error && !this.props.success) {
+      authResultMessage = (
+        <p style={{ fontWeight: 'bold', color: 'red' }}>
+          {this.props.error.message}
+        </p>
+      );
+    }
+
+    if (!this.props.error && this.props.success) {
+      authResultMessage = (
+        <p style={{ fontWeight: 'bold', color: 'green' }}>SUCCESS</p>
+      );
+    }
 
     const form = (
       <div className={classes.Auth}>
-        {errorMessage}
+        {authResultMessage}
         <h3>{this.state.isSignup ? 'Sign Up' : 'Sign In'}</h3>
         <form onSubmit={this.submitHandler}>
           {formElements}
@@ -135,6 +145,7 @@ class Auth extends Component {
 
 const mapPropsToState = state => ({
   loading: state.auth.loading,
+  success: state.auth.success,
   error: state.auth.error,
 });
 

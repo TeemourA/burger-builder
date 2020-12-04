@@ -16,13 +16,14 @@ export const purchaseBurgerStart = () => ({
   type: actionTypes.PURCHASE_BURGER_START,
 });
 
-export const purchaseBurger = orderData => {
+export const purchaseBurger = (order, token) => {
   return dispatch => {
     dispatch(purchaseBurgerStart());
+    const preparedToken = `?auth=${token}`;
     axios
-      .post('/orders.json', orderData)
+      .post(`/orders.json${preparedToken}`, order)
       .then(res => {
-        dispatch(purchaseBurgerSuccess(res.data.name, orderData));
+        dispatch(purchaseBurgerSuccess(res.data.name, order));
       })
       .catch(err => {
         dispatch(purchaseBurgerFail(err));
@@ -48,13 +49,13 @@ export const fetchOrdersStart = () => ({
   type: actionTypes.FETCH_ORDERS_START,
 });
 
-export const fetchOrders = () => {
+export const fetchOrders = token => {
   return dispatch => {
     dispatch(fetchOrdersStart());
+    const preparedToken = `?auth=${token}`;
     axios
-      .get('/orders.json')
+      .get(`/orders.json${preparedToken}`)
       .then(res => {
-        console.log('sadas');
         const fetchedOrders = Object.entries(res.data).map(([key, value]) => ({
           id: key,
           ...value,
