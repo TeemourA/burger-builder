@@ -126,6 +126,7 @@ class Auth extends Component {
 
     const form = (
       <div className={classes.Auth}>
+        {/* {console.log(redirect)} */}
         {redirect}
         {errorMessage}
         <h3>{this.state.isSignup ? 'Sign Up' : 'Sign In'}</h3>
