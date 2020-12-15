@@ -60,7 +60,6 @@ export const fetchOrders = token => {
           id: key,
           ...value,
         }));
-        console.log(fetchedOrders);
         dispatch(fetchOrdersSuccess(fetchedOrders));
       })
       .catch(err => fetchOrdersFail(err));

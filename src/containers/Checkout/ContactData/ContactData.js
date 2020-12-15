@@ -8,7 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import { purchaseBurger } from '../../../store/actions/index';
-import { updateObject } from '../../../utils';
+import { updateObject, checkValidity } from '../../../utils';
 
 class ContactData extends Component {
   state = {
@@ -93,11 +93,7 @@ class ContactData extends Component {
     },
     isFormValid: false,
   };
-
-  componentDidMount() {
-    console.log(this.props);
-  }
-
+  
   orderHandler = e => {
     e.preventDefault();
 
@@ -116,28 +112,10 @@ class ContactData extends Component {
     this.props.onBurgerOrder(order, this.props.token);
   };
 
-  checkValidity = (value, rules) => {
-    let isValid = true;
-
-    if (!rules) {
-      return true;
-    }
-
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-
-    if (rules.length) {
-      isValid = value.length === rules.length && isValid;
-    }
-
-    return isValid;
-  };
-
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedInput = updateObject(this.state.orderForm[inputIdentifier], {
       value: event.target.value,
-      valid: this.checkValidity(
+      valid: checkValidity(
         event.target.value,
         this.state.orderForm[inputIdentifier].validation
       ),

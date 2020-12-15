@@ -3,7 +3,6 @@ import React from 'react';
 import classes from './Order.module.css';
 
 const order = (props) => {
-  console.log(props.ingredients);
   const ingredients = Object.entries(props.ingredients)
     .map(([ingredient, amount], i) =>
       <span
